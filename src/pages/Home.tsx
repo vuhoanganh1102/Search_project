@@ -2,8 +2,12 @@ import React from 'react';
 import AllProducts from './AllProducts.tsx';
 
 
-
-const Home =  ({search,teacherCount, nameTeacher}) => {
+interface HomeProps {
+    search: [];
+    teacherCount: number;
+    nameTeacher: string;
+  }
+const Home: React.FC<HomeProps> =  ({search,teacherCount, nameTeacher}) => {
     return (
         <div className='2xl:mx-80 lg:mx-20 my-10 border-x-2 border-gray-300 justify-center'>
             <div className='flex flex-col justify-center items-center lg:mx-5'>

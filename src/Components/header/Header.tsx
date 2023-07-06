@@ -41,7 +41,7 @@ const navLinks = [
 ];
 
 const Header = () => {
-
+  
   const [teachers, setTeachers] = useState([])
   const [teacherCount, setTeacherCount] = useState(1)
 
@@ -60,9 +60,11 @@ const Header = () => {
  
   function handleChange(event) {
       setTextboxValue(event.target.value);
+      
   }
   function handleClick() {
       changeProduct(textboxValue,1);
+      
     // Thực hiện các tác vụ khác với giá trị textboxValue
   }
   return (

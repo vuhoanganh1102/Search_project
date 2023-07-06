@@ -8,20 +8,37 @@ import Header from '../Components/header/Header.tsx';
 
 
 
+interface AllProps {
+    search: [];
+    teacherCount: number;
+    nameTeacher: string;
+  }
 
-
-function AllProducts ({search,teacherCount,nameTeacher}) {
+const AllProducts:React.FC<AllProps>  = ({search,teacherCount,nameTeacher}) =>{
     const [currentPage,setCurrentPage] = useState(1);  //trang hiện tại
     const [newsPerPage,setNewsPerPage] = useState(10); //tin tức mỗi trang
     const [teachers, setTeachers] = useState(search);
+    const [name,setName]= useState('');
     const pageNumbers : number[] = [];
     for (let i = 1; i <= Math.ceil(teacherCount / newsPerPage); i++) {
       pageNumbers.push(i);
     }
-    
+    console.log("checkname",nameTeacher)
+    useEffect( () =>{
+        fetch(`https://admin.vtda.online:5000/search?name=${nameTeacher}&page=${currentPage}`)
+      .then(response => response.json())
+      .then(product =>{ setTeachers(product.teacher);})
+    }
+    ,[nameTeacher])
+    useEffect( () =>{
+        fetch(`https://admin.vtda.online:5000/search?name=${nameTeacher}&page=${currentPage}`)
+      .then(response => response.json())
+      .then(product =>{ setTeachers(product.teacher);})
+    }
+    ,[currentPage])
+    if(search.length != 0){
     return (
         <>
-        
         <div className='flex flex-col justify-center lg:mx-5 mx-4'>
             <div className='flex flex-col justify-center mb-4 mt-2'>
                 <table className="table-fixed border-collapse border border-slate-500 font-Roboto text-xs lg:text-base">
@@ -33,19 +50,15 @@ function AllProducts ({search,teacherCount,nameTeacher}) {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            
-                            teachers.map((product,index) =>
-                            <Product product={product} key={index}/>)}
-                            else{
-
-                            
+                        {           
+                                  teachers.map((product,index) =>{
+                                    return <Product product={product} key={index}/>;}
+                                )
+                                  
                         }
                     </tbody>
                 </table>
-                {
-                        search.length === 0 ? <Error_alert />:''    
-                }
+               
             </div>
             {/*Phan Trang...... */}
                 <ul className="flex justify-center h-8 text-sm">
@@ -66,7 +79,7 @@ function AllProducts ({search,teacherCount,nameTeacher}) {
                                 return(
                                    <button
                                         type='button'
-                                        onClick={() => chosePage(item)}
+                                        onClick={() => setCurrentPage(item)}
                                         className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                         {item}
                                     </button>
@@ -95,7 +108,7 @@ function AllProducts ({search,teacherCount,nameTeacher}) {
                                     return(
                                         <button
                                             type='button'
-                                            onClick={() => chosePage(item)}
+                                            onClick={() => setCurrentPage(item)}
                                            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                             {item}
                                         </button>
@@ -121,7 +134,8 @@ function AllProducts ({search,teacherCount,nameTeacher}) {
             </div>
             </>
     );
-    
+                }
+    else return <Error_alert />
     
     function chosePage(numberPage: number) {
         fetch(`https://admin.vtda.online:5000/search?name=${nameTeacher}&page=${numberPage}`)
